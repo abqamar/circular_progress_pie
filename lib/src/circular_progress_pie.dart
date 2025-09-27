@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-
-import '../circular_progress_pie.dart';
+import 'animated_pie_progress.dart';
 
 /// The type of animation for the pie progress indicator
 enum PieAnimationType {
-  /// Sweep animation (default) - grows from start angle
+  /// Sweep animation (default) - arc grows from start angle
   sweep,
 
-  /// Fill animation - fills from the center outward
+  /// Fill animation - pie fills from center outward
   fill,
 
   /// Clockwise animation with bounce effect
@@ -17,7 +16,17 @@ enum PieAnimationType {
   elastic,
 }
 
-/// A highly customizable pie progress indicator widget
+/// A highly customizable pie progress indicator widget.
+///
+/// Provides multiple constructors to build:
+/// - `CircularProgressPie.circular`: Ring style progress indicator
+/// - `CircularProgressPie.percentage`: Shows percentage text inside
+/// - `CircularProgressPie.gradient`: Progress with gradient fill
+///
+/// Example:
+/// ```dart
+/// CircularProgressPie.percentage(value: 0.5);
+/// ```
 class CircularProgressPie extends StatefulWidget {
   /// The current progress value between 0.0 and 1.0
   final double value;
@@ -25,19 +34,19 @@ class CircularProgressPie extends StatefulWidget {
   /// The size of the indicator (width and height)
   final double size;
 
-  /// Background color of the pie
+  /// Background color of the pie (default: light gray)
   final Color backgroundColor;
 
-  /// Progress color
+  /// Progress color (ignored if [progressGradient] is provided)
   final Color progressColor;
 
-  /// Gradient for the progress arc (overrides progressColor if provided)
+  /// Gradient for the progress arc (overrides [progressColor])
   final Gradient? progressGradient;
 
-  /// Stroke width for ring-style progress (only used when [isFilled] is false)
+  /// Stroke width for ring-style progress (only used when [isFilled] = false)
   final double strokeWidth;
 
-  /// Whether to draw a filled pie or a ring
+  /// Whether to draw a filled pie (true) or a ring (false)
   final bool isFilled;
 
   /// Type of animation to use
@@ -46,10 +55,10 @@ class CircularProgressPie extends StatefulWidget {
   /// Duration of the animation
   final Duration duration;
 
-  /// Curve for the animation
+  /// Curve for the animation (default: [Curves.easeInOut])
   final Curve curve;
 
-  /// Widget to display in the center of the pie
+  /// Widget to display in the center of the pie (e.g., text, icon)
   final Widget? child;
 
   /// Starting angle in radians (default: -pi/2 = top)
@@ -58,7 +67,7 @@ class CircularProgressPie extends StatefulWidget {
   /// Whether to animate in reverse direction
   final bool reverse;
 
-  /// Whether to show the animation
+  /// Whether to animate changes
   final bool animate;
 
   /// Callback when animation completes
@@ -87,7 +96,7 @@ class CircularProgressPie extends StatefulWidget {
        ),
        assert(size > 0, 'Size must be positive');
 
-  /// Creates a circular progress bar style indicator (ring)
+  /// Creates a circular ring-style progress indicator.
   static Widget circular({
     required double value,
     double size = 40.0,
@@ -109,7 +118,7 @@ class CircularProgressPie extends StatefulWidget {
     );
   }
 
-  /// Creates a percentage indicator with text in the center
+  /// Creates a percentage indicator with text in the center.
   static Widget percentage({
     required double value,
     double size = 100.0,
@@ -137,7 +146,7 @@ class CircularProgressPie extends StatefulWidget {
     );
   }
 
-  /// Creates a gradient progress indicator
+  /// Creates a gradient progress indicator.
   static Widget gradient({
     required double value,
     required Gradient gradient,

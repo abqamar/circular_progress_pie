@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'circular_progress_pie.dart';
 import 'pie_painter.dart';
-import '../circular_progress_pie.dart';
+import 'circular_progress_pie.dart';
 
+/// Internal widget that handles animation for [CircularProgressPie].
+///
+/// This widget uses [AnimationController] to animate from
+/// the old value to the new value whenever [value] changes.
 class AnimatedPieProgress extends StatefulWidget {
   final double value;
   final double size;
@@ -52,9 +55,7 @@ class _AnimatedPieProgressState extends State<AnimatedPieProgress>
   @override
   void initState() {
     super.initState();
-
     _controller = AnimationController(vsync: this, duration: widget.duration);
-
     _animateTo(widget.value);
   }
 
@@ -67,6 +68,7 @@ class _AnimatedPieProgressState extends State<AnimatedPieProgress>
     }
   }
 
+  /// Starts animation from [_oldValue] to [newValue].
   void _animateTo(double newValue) {
     if (!widget.animate) {
       setState(() {});
@@ -96,7 +98,7 @@ class _AnimatedPieProgressState extends State<AnimatedPieProgress>
       height: widget.size,
       child: AnimatedBuilder(
         animation: _controller,
-        builder: (_, _) {
+        builder: (_, __) {
           final animatedValue = widget.animate
               ? _animation.value
               : widget.value;
