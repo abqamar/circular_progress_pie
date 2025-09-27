@@ -1,5 +1,6 @@
-import 'package:circular_progress_pie/circular_progress_pie.dart';
 import 'package:flutter/material.dart';
+
+import '../circular_progress_pie.dart';
 
 /// The type of animation for the pie progress indicator
 enum PieAnimationType {

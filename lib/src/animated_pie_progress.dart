@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'circular_progress_pie.dart';
 import 'pie_painter.dart';
@@ -97,7 +96,7 @@ class _AnimatedPieProgressState extends State<AnimatedPieProgress>
       height: widget.size,
       child: AnimatedBuilder(
         animation: _controller,
-        builder: (_, __) {
+        builder: (_, _) {
           final animatedValue = widget.animate
               ? _animation.value
               : widget.value;
