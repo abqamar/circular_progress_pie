@@ -2,7 +2,7 @@
 
 A highly customizable, animated pie chart progress indicator for Flutter with smooth animations, gradients, and multiple animation types.
 
-![Demo](https://via.placeholder.com/400x200?text=Pie+Progress+Indicator)
+![Demo](https://via.placeholder.com/400x200?text=Circular+Progress+Pie)
 
 ## Features
 
@@ -56,21 +56,36 @@ PieProgressIndicator.gradient(
   gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
 )
 ```
-
 ## Properties
+| Property            | Type             | Default                | Default                                         |  
+|---------------------|------------------|------------------------|-------------------------------------------------|
+| value               | double           | required               | Progress value between 0.0 and 1.0              |  
+| size                | double           | 100.0                  | Width and height of the indicator               |  
+| backgroundColor     | Color            | Color(0xFFE0E0E0)      | Background color of the pie                     |  
+| progressColor       | Color            | Colors.blue            | Color of the progress arc                       |  
+| progressGradient    | Gradient?        | null                   | Gradient for progress (overrides progressColor) |
+| strokeWidth         | double           | 10.0                   | Stroke width for ring-style progress            |
+| isFilled            | bool             | true                   | Whether to draw filled pie or ring              |
+| animationType       | PieAnimationType | PieAnimationType.sweep | Type of animation effect                        |
+| duration            | Duration         | 800ms                  | Animation duration                              |
+| curve               | Curve            | Curves.easeInOut       | Animation curve for sweep type                  |
+| startAngle          | double           | -pi/2 (top)            | Starting angle in radians                       |
+| reverse             | bool             | false                  | Animate in reverse direction                    |
+| animate             | bool             | true                   | Whether to show animation                       |
+| child               | Widget?          | null                   | Widget to display in center                     |
+| onAnimationComplete | VoidCallback?    | null                   | Callback when animation completes               |
 
-Property	Type	Default	Description
-value	double	required	Progress value (0.0 to 1.0)
-size	double	100.0	Width and height of the indicator
-progressColor	Color	Colors.blue	Color of the progress arc
-backgroundColor	Color	Color(0xFFE0E0E0)	Background color
-strokeWidth	double	10.0	Stroke width for ring style
-isFilled	bool	true	Whether to draw filled pie or ring
-animationType	PieAnimationType	sweep	Type of animation
-duration	Duration	800ms	Animation duration
-curve	Curve	Curves.easeInOut	Animation curve
-startAngle	double	-pi/2	Starting angle (top)
-reverse	bool	false	Animate in reverse direction
-child	Widget?	null	Center widget
+## PieAnimationType Values
+| Value   | Description                       | Curve Used         |
+|---------|-----------------------------------|--------------------|
+| sweep   | Smooth sweep animation (default)  | Custom curve       |
+| bounce  | Bounce effect at the end          | Curves.bounceOut   |
+| elastic | Elastic overshoot effect          | Curves.elasticOut  |
+| fill    | Fill from center outward          | Curves.easeInCubic |
 
-
+## Quick Constructors
+| Constructor                       | Description                 | Example                                                          |
+|-----------------------------------|-----------------------------|------------------------------------------------------------------|
+| PieProgressIndicator.circular()   | Ring-style progress bar     | PieProgressIndicator.circular(value: 0.7, size: 60)              |
+| PieProgressIndicator.percentage() | Percentage with center text | PieProgressIndicator.percentage(value: 0.8)                      |
+| PieProgressIndicator.gradient()   | Gradient progress indicator | PieProgressIndicator.gradient(value: 0.6, gradient: myGradient)  |
