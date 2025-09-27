@@ -78,7 +78,7 @@ class _AnimatedPieProgressState extends State<AnimatedPieProgress>
       case PieAnimationType.fill:
         return Curves.easeInCubic;
       case PieAnimationType.sweep:
-      return widget.curve;
+        return widget.curve;
     }
   }
 
