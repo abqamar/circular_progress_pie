@@ -1,10 +1,9 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 
-import 'circular_progress_pie.dart';
-
 class PiePainter extends CustomPainter {
-  final double percentage;
+  final double value;
   final Color backgroundColor;
   final Color progressColor;
   final Gradient? progressGradient;
@@ -12,80 +11,47 @@ class PiePainter extends CustomPainter {
   final bool isFilled;
   final double startAngle;
   final bool reverse;
-  final PieAnimationType animationType;
-  final Animation<double>? animation;
 
   PiePainter({
-    required this.percentage,
+    required this.value,
     required this.backgroundColor,
     required this.progressColor,
     this.progressGradient,
-    this.strokeWidth = 10.0,
-    this.isFilled = true,
-    this.startAngle = -pi / 2,
-    this.reverse = false,
-    this.animationType = PieAnimationType.sweep,
-    this.animation,
+    required this.strokeWidth,
+    required this.isFilled,
+    required this.startAngle,
+    required this.reverse,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    final center = size.center(Offset.zero);
-    final radius = size.width / 2;
-
-    _drawBackground(canvas, center, radius);
-
-    // Only draw progress if percentage > 0
-    if (percentage > 0.0) {
-      _drawProgress(canvas, size);
-    }
-  }
-
-  void _drawBackground(Canvas canvas, Offset center, double radius) {
-    final bgPaint = Paint()
-      ..color = backgroundColor
+    final rect = Offset.zero & size;
+    final paint = Paint()
       ..style = isFilled ? PaintingStyle.fill : PaintingStyle.stroke
-      ..strokeWidth = isFilled ? 0 : strokeWidth
-      ..isAntiAlias = true;
+      ..strokeWidth = strokeWidth;
 
-    canvas.drawCircle(center, radius, bgPaint);
-  }
+    // Background
+    paint.color = backgroundColor;
+    canvas.drawArc(rect, 0, 2 * pi, false, paint);
 
-  void _drawProgress(Canvas canvas, Size size) {
-    final progressPaint = Paint()
-      ..style = isFilled ? PaintingStyle.fill : PaintingStyle.stroke
-      ..strokeWidth = isFilled ? 0 : strokeWidth
-      ..strokeCap = StrokeCap.round
-      ..isAntiAlias = true;
-
+    // Progress
     if (progressGradient != null) {
-      final rect = Rect.fromCircle(
-        center: size.center(Offset.zero),
-        radius: size.width / 2,
-      );
-      progressPaint.shader = progressGradient!.createShader(rect);
+      paint.shader = progressGradient!.createShader(rect);
     } else {
-      progressPaint.color = progressColor;
+      paint.color = progressColor;
     }
 
-    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
-
-    // Calculate the sweep angle based on the percentage
-    final sweepAngle = 2 * pi * percentage * (reverse ? -1 : 1);
-
-    canvas.drawArc(rect, startAngle, sweepAngle, isFilled, progressPaint);
+    final sweepAngle = (reverse ? -1 : 1) * (value * 2 * pi);
+    canvas.drawArc(rect, startAngle, sweepAngle, isFilled, paint);
   }
 
   @override
-  bool shouldRepaint(covariant PiePainter oldDelegate) {
-    return oldDelegate.percentage != percentage ||
-        oldDelegate.backgroundColor != backgroundColor ||
-        oldDelegate.progressColor != progressColor ||
-        oldDelegate.strokeWidth != strokeWidth ||
-        oldDelegate.isFilled != isFilled ||
-        oldDelegate.startAngle != startAngle ||
-        oldDelegate.reverse != reverse ||
-        oldDelegate.animationType != animationType ||
-        oldDelegate.animation != animation;
-  }
+  bool shouldRepaint(PiePainter oldDelegate) =>
+      oldDelegate.value != value ||
+      oldDelegate.progressColor != progressColor ||
+      oldDelegate.progressGradient != progressGradient ||
+      oldDelegate.strokeWidth != strokeWidth ||
+      oldDelegate.isFilled != isFilled ||
+      oldDelegate.startAngle != startAngle ||
+      oldDelegate.reverse != reverse;
 }

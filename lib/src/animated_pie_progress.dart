@@ -1,6 +1,8 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'circular_progress_pie.dart';
 import 'pie_painter.dart';
+import '../circular_progress_pie.dart';
 
 class AnimatedPieProgress extends StatefulWidget {
   final double value;
@@ -13,11 +15,11 @@ class AnimatedPieProgress extends StatefulWidget {
   final PieAnimationType animationType;
   final Duration duration;
   final Curve curve;
-  final Widget? child;
   final double startAngle;
   final bool reverse;
   final bool animate;
   final VoidCallback? onAnimationComplete;
+  final Widget? child;
 
   const AnimatedPieProgress({
     super.key,
@@ -26,16 +28,16 @@ class AnimatedPieProgress extends StatefulWidget {
     required this.backgroundColor,
     required this.progressColor,
     this.progressGradient,
-    this.strokeWidth = 10.0,
-    this.isFilled = true,
-    this.animationType = PieAnimationType.sweep,
-    this.duration = const Duration(milliseconds: 800),
-    this.curve = Curves.easeInOut,
-    this.child,
-    this.startAngle = -1.5708,
-    this.reverse = false,
-    this.animate = true,
+    required this.strokeWidth,
+    required this.isFilled,
+    required this.animationType,
+    required this.duration,
+    required this.curve,
+    required this.startAngle,
+    required this.reverse,
+    required this.animate,
     this.onAnimationComplete,
+    this.child,
   });
 
   @override
@@ -46,60 +48,40 @@ class _AnimatedPieProgressState extends State<AnimatedPieProgress>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
-  double _previousValue = 0.0;
+  double _oldValue = 0.0;
 
   @override
   void initState() {
     super.initState();
-    _previousValue = widget.value;
-    _controller = AnimationController(duration: widget.duration, vsync: this);
 
-    _animation = Tween<double>(begin: _previousValue, end: widget.value)
-        .animate(
-          CurvedAnimation(
-            parent: _controller,
-            curve: _getCurveForAnimationType(widget.animationType),
-          ),
-        );
+    _controller = AnimationController(vsync: this, duration: widget.duration);
 
-    if (widget.animate) {
-      _controller.forward().then((_) {
-        widget.onAnimationComplete?.call();
-      });
-    }
-  }
-
-  Curve _getCurveForAnimationType(PieAnimationType type) {
-    switch (type) {
-      case PieAnimationType.bounce:
-        return Curves.bounceOut;
-      case PieAnimationType.elastic:
-        return Curves.elasticOut;
-      case PieAnimationType.fill:
-        return Curves.easeInCubic;
-      case PieAnimationType.sweep:
-        return widget.curve;
-    }
+    _animateTo(widget.value);
   }
 
   @override
   void didUpdateWidget(AnimatedPieProgress oldWidget) {
     super.didUpdateWidget(oldWidget);
-
-    if (oldWidget.value != widget.value && widget.animate) {
-      _previousValue = _animation.value;
-      _controller.reset();
-      _animation = Tween<double>(begin: _previousValue, end: widget.value)
-          .animate(
-            CurvedAnimation(
-              parent: _controller,
-              curve: _getCurveForAnimationType(widget.animationType),
-            ),
-          );
-      _controller.forward().then((_) {
-        widget.onAnimationComplete?.call();
-      });
+    if (oldWidget.value != widget.value) {
+      _oldValue = oldWidget.value;
+      _animateTo(widget.value);
     }
+  }
+
+  void _animateTo(double newValue) {
+    if (!widget.animate) {
+      setState(() {});
+      return;
+    }
+
+    _animation = Tween<double>(
+      begin: _oldValue,
+      end: newValue,
+    ).animate(CurvedAnimation(parent: _controller, curve: widget.curve));
+
+    _controller.forward(from: 0).whenComplete(() {
+      widget.onAnimationComplete?.call();
+    });
   }
 
   @override
@@ -113,13 +95,15 @@ class _AnimatedPieProgressState extends State<AnimatedPieProgress>
     return SizedBox(
       width: widget.size,
       height: widget.size,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          CustomPaint(
-            size: Size(widget.size, widget.size),
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (_, __) {
+          final animatedValue = widget.animate
+              ? _animation.value
+              : widget.value;
+          return CustomPaint(
             painter: PiePainter(
-              percentage: widget.animate ? _animation.value : widget.value,
+              value: animatedValue,
               backgroundColor: widget.backgroundColor,
               progressColor: widget.progressColor,
               progressGradient: widget.progressGradient,
@@ -127,12 +111,10 @@ class _AnimatedPieProgressState extends State<AnimatedPieProgress>
               isFilled: widget.isFilled,
               startAngle: widget.startAngle,
               reverse: widget.reverse,
-              animationType: widget.animationType,
-              animation: widget.animate ? _animation : null,
             ),
-          ),
-          if (widget.child != null) widget.child!,
-        ],
+            child: Center(child: widget.child),
+          );
+        },
       ),
     );
   }

@@ -1,6 +1,6 @@
 name: circular_progress_pie
 description: "A highly customizable pie chart progress indicator for Flutter with smooth animations, gradients, and multiple animation types."
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/abqamar/circular_progress_pie.git
 repository: https://github.com/abqamar/circular_progress_pie.git
 
