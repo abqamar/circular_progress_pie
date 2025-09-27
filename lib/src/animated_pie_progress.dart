@@ -20,7 +20,7 @@ class AnimatedPieProgress extends StatefulWidget {
   final VoidCallback? onAnimationComplete;
 
   const AnimatedPieProgress({
-    Key? key,
+    super.key,
     required this.value,
     required this.size,
     required this.backgroundColor,
@@ -36,7 +36,7 @@ class AnimatedPieProgress extends StatefulWidget {
     this.reverse = false,
     this.animate = true,
     this.onAnimationComplete,
-  }) : super(key: key);
+  });
 
   @override
   State<AnimatedPieProgress> createState() => _AnimatedPieProgressState();
@@ -78,8 +78,7 @@ class _AnimatedPieProgressState extends State<AnimatedPieProgress>
       case PieAnimationType.fill:
         return Curves.easeInCubic;
       case PieAnimationType.sweep:
-      default:
-        return widget.curve;
+      return widget.curve;
     }
   }
 
