@@ -2,7 +2,7 @@
 
 A highly customizable, animated pie chart progress indicator for Flutter with smooth animations, gradients, and multiple animation types.
 
-![Demo](https://via.placeholder.com/400x200?text=Circular+Progress+Pie)
+![Demo](https://raw.githubusercontent.com/abqamar/circular_progress_pie/refs/heads/main/screenshot/sample_video.gif)
 
 ## Features
 
