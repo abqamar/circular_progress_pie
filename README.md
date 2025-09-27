@@ -57,7 +57,7 @@ PieProgressIndicator.gradient(
 )
 ```
 ## Properties
-| Property            | Type             | Default                | Default                                         |  
+| Property            | Type             | Default                | Description                                     |  
 |---------------------|------------------|------------------------|-------------------------------------------------|
 | value               | double           | required               | Progress value between 0.0 and 1.0              |  
 | size                | double           | 100.0                  | Width and height of the indicator               |  
