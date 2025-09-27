@@ -54,13 +54,13 @@ class _AnimatedPieProgressState extends State<AnimatedPieProgress>
     _previousValue = widget.value;
     _controller = AnimationController(duration: widget.duration, vsync: this);
 
-    _animation = Tween<double>(
-      begin: _previousValue,
-      end: widget.value,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: _getCurveForAnimationType(widget.animationType),
-    ));
+    _animation = Tween<double>(begin: _previousValue, end: widget.value)
+        .animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: _getCurveForAnimationType(widget.animationType),
+          ),
+        );
 
     if (widget.animate) {
       _controller.forward().then((_) {
@@ -90,13 +90,13 @@ class _AnimatedPieProgressState extends State<AnimatedPieProgress>
     if (oldWidget.value != widget.value && widget.animate) {
       _previousValue = _animation.value;
       _controller.reset();
-      _animation = Tween<double>(
-        begin: _previousValue,
-        end: widget.value,
-      ).animate(CurvedAnimation(
-        parent: _controller,
-        curve: _getCurveForAnimationType(widget.animationType),
-      ));
+      _animation = Tween<double>(begin: _previousValue, end: widget.value)
+          .animate(
+            CurvedAnimation(
+              parent: _controller,
+              curve: _getCurveForAnimationType(widget.animationType),
+            ),
+          );
       _controller.forward().then((_) {
         widget.onAnimationComplete?.call();
       });

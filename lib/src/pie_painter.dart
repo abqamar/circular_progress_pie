@@ -59,7 +59,10 @@ class PiePainter extends CustomPainter {
       ..isAntiAlias = true;
 
     if (progressGradient != null) {
-      final rect = Rect.fromCircle(center: size.center(Offset.zero), radius: size.width / 2);
+      final rect = Rect.fromCircle(
+        center: size.center(Offset.zero),
+        radius: size.width / 2,
+      );
       progressPaint.shader = progressGradient!.createShader(rect);
     } else {
       progressPaint.color = progressColor;
